@@ -7,7 +7,7 @@ const bodyP = require('body-parser');
 
 // DB CONNECTION STRING 
 const mongoose = require('mongoose'); 
-mongoose.connect('mongodb+srv://dpg1919:Claptoncocaine13@devmongo-ak3dm.mongodb.net/test?retryWrites=true&w=majority', 
+mongoose.connect('mongodb+srv://dpg1919:' + process.env.MONGO + '@devmongo-ak3dm.mongodb.net/test?retryWrites=true&w=majority', 
 { 
     useNewUrlParser: true, 
     useUnifiedTopology: true 
@@ -18,5 +18,12 @@ mongoose.connect('mongodb+srv://dpg1919:Claptoncocaine13@devmongo-ak3dm.mongodb.
 // MIDDLE WARE  
 app.use(bodyP.json());
 app.use(bodyP.urlencoded());
+
+// ROUTES 
+const createUser = require('./routes/createUser'); 
+app.use('/api/createUser', createUser); 
+
+// STATIC FILE
+app.use(express.static('./public')); 
 
 app.listen(PORT, () => console.log(`App is live on server ${PORT}!`)); 
