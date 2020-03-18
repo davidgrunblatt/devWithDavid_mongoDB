@@ -13,14 +13,8 @@ require('./startup/mongoDB');
 app.use(bodyP.json());
 app.use(bodyP.urlencoded());
 
-// ROUTE MODULES 
-const createUser = require('./routes/createUser'); 
-const loginUser = require('./routes/login'); 
-const putUser = require('./routes/putUser');    
-// ROUTES 
-app.use('/api/createUser', createUser); 
-app.use('/api/loginUser', loginUser); 
-app.use('/api/putUser', putUser); 
+// ROUTES
+require('./startup/routes')(app); 
 
 // STATIC FILE
 app.use(express.static('./public')); 
