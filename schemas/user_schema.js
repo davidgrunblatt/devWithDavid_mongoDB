@@ -8,16 +8,23 @@ const mongoose = require('mongoose');
     },
      username: {
          type: String,
-         unique: true
+         required: true, 
+         unique: true,
+         max: 120
      },
      name: {
          type: String
      },
      email: {
-         type: String
+         type: String,
+         required: true, 
+         unique: true,
+         max: 120
      },
      password: {
-         type: String
+         type: String,
+         required: true,
+         max: 220
      }
  });
 
