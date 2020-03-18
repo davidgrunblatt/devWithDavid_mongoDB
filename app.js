@@ -1,29 +1,27 @@
 
-// BASIC SETUP
+// BASIC SERVER SETUP
 const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 3001; 
 const bodyP = require('body-parser');
+app.listen(PORT, () => console.log(`App is live on server ${PORT}!`)); 
 
-// DB CONNECTION STRING 
-const mongoose = require('mongoose'); 
-mongoose.connect('mongodb+srv://dpg1919:' + process.env.MONGO + '@devmongo-ak3dm.mongodb.net/test?retryWrites=true&w=majority', 
-{ 
-    useNewUrlParser: true, 
-    useUnifiedTopology: true 
-})
-.then(() => console.log('MongoDB is connected!'))
-.catch(ex => console.error(ex.message));
+// MONGO DB 
+require('./startup/mongoDB'); 
 
 // MIDDLE WARE  
 app.use(bodyP.json());
 app.use(bodyP.urlencoded());
 
-// ROUTES 
+// ROUTE MODULES 
 const createUser = require('./routes/createUser'); 
+const loginUser = require('./routes/login'); 
+const putUser = require('./routes/putUser');    
+// ROUTES 
 app.use('/api/createUser', createUser); 
+app.use('/api/loginUser', loginUser); 
+app.use('/api/putUser', putUser); 
 
 // STATIC FILE
 app.use(express.static('./public')); 
 
-app.listen(PORT, () => console.log(`App is live on server ${PORT}!`)); 
