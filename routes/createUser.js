@@ -3,7 +3,8 @@ const express = require('express');
 const router = express.Router(); 
 const User = require('../schemas/user_schema'); 
 const stamp = require('../util/timeStamp'); 
-const bcrypt = require('bcrypt'); 
+const hashPass = require('../util/hashPass'); 
+const email = require('../util/registrationConfirmation'); 
 
 router.post('/', async (req, res) => {
     try {
@@ -14,7 +15,7 @@ router.post('/', async (req, res) => {
             email: req.body.email
         })
         .catch(() => console.error('Unable to check for duplicates.'));
-    
+        // if username / password in use status 400
         if(check) return res.status(400).send('Username or email is already in use.'); 
     
         // create new instance of user 
@@ -27,14 +28,13 @@ router.post('/', async (req, res) => {
         })
     
         // salt and hash the users password 
-        const salt = await bcrypt.genSalt(10);
-        const hash = await bcrypt.hash(newUser.password, salt)
-        .catch(ex => console.error(ex.message)); 
+        const hash = await hashPass(newUser.password); 
         newUser.password = hash; 
 
         // save to mongoDB
         const save = await newUser.save(); 
-
+        // send confirmation email 
+        await email(newUser); 
         // send new user info 
         res.send(save); 
     }
