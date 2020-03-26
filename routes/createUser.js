@@ -35,8 +35,13 @@ router.post('/', async (req, res) => {
         const save = await newUser.save(); 
         // send confirmation email 
         await email(newUser); 
-        // send new user info 
-        res.send(save); 
+        // JWT authentication
+        const token = await newUser.generateAuthToken(); 
+
+        res
+        .header('x-auth-token', token)
+        .header('access-control-expose-headers', 'x-auth-token')
+        .send(save); 
     }
     catch(ex) {
         res.status(400).send(ex.message); 

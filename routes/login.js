@@ -20,7 +20,13 @@ router.get('/', async (req, res) => {
             name: search.name,
             email: search.email
         }
-        res.send(dummyAccount);
+        // generate AUTH token
+        const token = await search.generateAuthToken(); 
+
+        res
+        .header('x-auth-token', token)
+        .header('acess-control-expose-headers', 'x-auth-token')
+        .send(dummyAccount);
     }
     catch(ex) {
         res.status(400).send(ex.message); 

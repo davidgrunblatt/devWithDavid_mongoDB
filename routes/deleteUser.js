@@ -2,8 +2,9 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../schemas/user_schema'); 
+const auth = require('../middleware/authentication'); 
 
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
     try {
         // Find and Delete by Username 
         const search = await User

@@ -1,8 +1,9 @@
 
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken'); 
 
  // Create a User Schema
- const schema = new mongoose.Schema({
+const schema = new mongoose.Schema({
     iat: {
         type: Date
     },
@@ -28,7 +29,19 @@ const mongoose = require('mongoose');
      }
  });
 
+// GENERATE AUTH TOKEN 
+schema.methods.generateAuthToken = function(){
+    // sign new jwt with basic user info
+    const token = jwt.sign({
+        user_id: this._id,
+        username: this.username,
+        email: this.email,
+    }, process.env.jwtPrivateKey); 
+
+    return token; 
+}
+
  // Create a Model
- const User = mongoose.model('User', schema);
+const User = mongoose.model('User', schema);
 
  module.exports = User; 

@@ -2,8 +2,9 @@
 const express = require('express');
 const router = express.Router();
 const find = require('../util/find'); 
+const auth = require('../middleware/authentication'); 
 
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
     try {
         // look up account by username
         const search = await find(req.body.username);
